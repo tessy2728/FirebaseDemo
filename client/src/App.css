@@ -1,0 +1,89 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 80px;
+  width: 80px;
+}
+
+.App-header {
+  background-color: #20233b !important;
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.Site {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* 1, 3 */
+}
+
+.Site-header,
+.Site-footer {
+  flex: none; /* 2 */
+}
+
+.Site-banner {
+  width: 100%;
+}
+
+.Site-content {
+  flex: 1 0 auto; /* 2 */
+  padding: var(--space) var(--space) 0;
+  width: 1000px;
+  margin:0 auto;
+}
+.Site-content h1, .Site-content h2, .Site-content p {
+    text-align: left;
+}
+.Site-content::after {
+  content: '\00a0'; /* &nbsp; */
+  display: block;
+  margin-top: var(--space);
+  height: 0px;
+  visibility: hidden;
+}
+@media (--break-lg) {
+  .Site-content {
+    padding-top: var(--space-lg);
+  }
+  .Site-content::after {
+    margin-top: var(--space-lg);
+  }
+}
+
+.Site-content--full {
+  padding: 0;
+}
+.Site-content--full::after {
+  content: none;
+}
+a {
+  text-decoration: none;
+}
+
+.icon-circle {
+  border-radius: 50%;
+  width: 35px;
+}
+
+.Signin-icon-bar {
+  justify-content: space-around;
+  display: flex;
+  width: 200px;
+  align-items: center;
+  margin: 0 auto;
+}

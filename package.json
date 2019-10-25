@@ -1,0 +1,20 @@
+{
+ "name": "craftworld",
+ "version": "1.0.0",
+ "description": "An elegant world of handmade products!",
+ "main": "index.js",
+ "scripts": {
+  "client": "cd client && npm start",
+  "server": "cd server && npm start",
+  "start": "concurrently \"npm run server\" \"npm run client\""
+ },
+ "keywords": [],
+ "author": "",
+ "license": "ISC",
+ "devDependencies": {
+  "concurrently": "3.5.1"
+ },
+ "dependencies": {
+  "@material-ui/styles": "^3.0.0-alpha.10"
+ }
+}

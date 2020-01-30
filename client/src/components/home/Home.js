@@ -10,7 +10,6 @@ import firebaseInfo5 from '../../images/firebase-info-5.jpg';
 class Home extends Component {
     componentDidMount(){
         const { username } = this.props.match.params
-        console.log("Username", username)
     }
    render() {
     const { username } = this.props.match.params;

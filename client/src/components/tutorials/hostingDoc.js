@@ -18,7 +18,7 @@ class hostingDoc extends Component {
                 <h2>Step 1: Install the Firebase CLI</h2>
                 <p>Using the <a href="https://firebase.google.com/docs/cli">Firebase CLI</a>, you deploy files from local directories on your computer to your Hosting server. </p>
                 <h2>Step 2: Initialize your project</h2>
-                <h2>Step 3:Step 3: Deploy to your site</h2>
+                <h2>Step 3: Deploy to your site</h2>
                 <img src={hostingImg} alt="hostingImg" />
         </div>
     );

@@ -1,0 +1,24 @@
+{
+    "messages": {
+        "msg01": {
+            "initiator": "Tessy",
+            "created_at": "Fri Jan 10 2020 11:05:19 GMT+0530",
+            "conversations": {
+                "conv_01":{
+                    "conversation_id": 1,
+                    "message": "Hello",
+                    "updated_at": "Fri Jan 10 2020 11:05:19 GMT+0530",
+                    "from": "Tessy",
+                    "to": "Anju"
+                },
+                "conv_02":{
+                    "conversation_id": 2,
+                    "message": "Hi",
+                    "updated_at": "Fri Jan 10 2020 11:15:19 GMT+0530",
+                    "from": "Anju",
+                    "to": "Tessy"
+                }
+            }
+        }
+    }
+}

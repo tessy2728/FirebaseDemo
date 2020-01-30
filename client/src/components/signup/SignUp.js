@@ -49,7 +49,6 @@ class SignUpPage extends Component {
           history.push(ROUTES.HOME + '/' + this.state.username);
         })
         .catch(error => {
-          console.log(error.message)
           this.setState({ error });
         });;
     } catch (error) {

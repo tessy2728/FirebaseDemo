@@ -40,14 +40,11 @@ class SignInPage extends Component {
         event.preventDefault();
         const { email, password } = event.target.elements;
         try {
-            console.log(email.value, password.value)
         const user = this.props.firebase
             .doSignInWithEmailAndPassword(email.value, password.value)
             .then(authUser => {
-                console.log(authUser)
                 this.setState({ error: null,  username: authUser.user.email});
                 this.setState(prevState => ({ isLoggedIn: true }));
-                console.log(this.state, this.props)
                 history.push(ROUTES.HOME + '/' + this.state.username);
               })
               .catch(error => {
@@ -65,19 +62,16 @@ class SignInPage extends Component {
     };
     handleSignUp = async event => {
         event.preventDefault();
-        console.log(event.target.elements)
         const { email, password, confirmPassword } = event.target.elements;
         try {
           const user = this.props.firebase
             .auth()
             .createUserWithEmailAndPassword(email.value, password.value)
             .then(authUser => {
-                console.log(authUser)
                 this.setState({ error: null,  username: authUser.user.email, isLoggedIn: true});
                 history.push(ROUTES.HOME + '/' + this.state.username);
               })
               .catch(error => {
-                console.log(error.message)
                 this.setState({ error });
               });
         } catch (error) {

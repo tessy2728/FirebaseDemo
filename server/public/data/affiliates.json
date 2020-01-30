@@ -1,0 +1,65 @@
+[
+    {
+        "code": "TESTCO",
+        "name": "Test Company [TESTCO]",
+        "sourceOrg": "SAVI",
+        "status": 1,
+        "subTaxon": "shipper",
+        "taxon": "affiliate"
+    },
+    {
+        "code": "TESTCO",
+        "name": "Test Company [TESTCO]",
+        "sourceOrg": "SAVI",
+        "status": 1,
+        "subTaxon": "customer",
+        "taxon": "affiliate"
+    },
+    {
+        "code": "TESTCO",
+        "name": "Test Company [TESTCO]",
+        "sourceOrg": "SAVI",
+        "status": 1,
+        "subTaxon": "carrier",
+        "taxon": "affiliate"
+    },
+    {
+        "code": "SAVITEST",
+        "name": "Savi Test Entity [SAVITEST]",
+        "sourceOrg": "SAVI",
+        "status": 1,
+        "subTaxon": "customer",
+        "taxon": "affiliate"
+    },
+    {
+        "code": "TESTENTITYTW",
+        "name": "Test Entity Tech. Co. Tw [TESTENTITYTW]",
+        "sourceOrg": "SAVI",
+        "status": 1,
+        "subTaxon": "carrier",
+        "taxon": "affiliate"
+    },
+    {
+        "code": "PMAR",
+        "name": "Pete's Market Stores [PMAR]",
+        "sourceOrg": "SAVI",
+        "status": 1,
+        "subTaxon": "customer",
+        "taxon": "affiliate"
+    },
+    {
+        "code": "USFS",
+        "name": "United States Forest Service Store [USFS]",
+        "sourceOrg": "SAVI",
+        "status": 1,
+        "subTaxon": "customer",
+        "taxon": "affiliate"
+    },
+    {
+        "code": "SWFT",
+        "name": "Swift Transportation Services, Inc. [SWFT]",
+        "sourceOrg": "SAVI",
+        "status": 1,
+        "subTaxon": "carrier",
+        "taxon": "affiliate"
+    }]

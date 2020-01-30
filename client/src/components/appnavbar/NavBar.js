@@ -7,7 +7,7 @@ import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import { fade } from '@material-ui/core/styles/colorManipulator';
+
 import { withStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
@@ -16,7 +16,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import logo from '../../images/logo-firebase-cra.svg';
-import MyButton from '../widgets/MyButton';
+import CustomButton from '../widgets/CustomButton';
 import { NavLink } from 'react-router-dom'
 import { Link } from 'react-router-dom';
 import * as ROUTES from '../../constants/routes';
@@ -24,134 +24,85 @@ import SignInPage from '../signin/SignIn';
 import Home from '../home/Home';
 import AuthenticationDoc from '../tutorials/authenticationDoc';
 import ReattimeDBDoc from '../tutorials/reattimeDBDoc';
+import ChatForm from '../chat/chatForm/chatForm'
 import HostingDoc from '../tutorials/hostingDoc';
 import { Router,  Route } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import history from '../../history';
 import hostingDoc from '../tutorials/hostingDoc';
+import CustomFilter from '../widgets/filter/CustomFilter'
+import filtersArray from '../../json/filters.json'
+import filterData from '../../json/division.json';
+import { AuthContext } from "../../App";
+import styles from './NavBarStyles'
 
-const styles = theme => ({
-  root: {
-    width: '100%',
-  },
-  grow: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
-  },
-  title: {
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
-  },
-  search: {
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing.unit,
-      width: 'auto',
-    },
-  },
-  searchIcon: {
-    width: theme.spacing.unit * 9,
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  inputRoot: {
-    color: 'inherit',
-    width: '100%',
-  },
-  inputInput: {
-    paddingTop: theme.spacing.unit,
-    paddingRight: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit * 10,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      width: 120,
-      '&:focus': {
-        width: 200,
-      },
-    },
-  },
-  sectionDesktop: {
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'flex',
-    },
-  },
-  sectionMobile: {
-    display: 'flex',
-    [theme.breakpoints.up('md')]: {
-      display: 'none',
-    },
-  },
-});
-
-class PrimarySearchAppBar extends React.Component {
-  state = {
+const PrimarySearchAppBar = (props) => {
+  const navBarState = {
     anchorEl: null,
     commonMenuEl: null,
     mobileMoreAnchorEl: null
   };
 
 
-  handleProfileMenuOpen = event => {
-    this.setState({ anchorEl: event.currentTarget });
+  const handleProfileMenuOpen = event => {
+    // this.setState({ anchorEl: event.currentTarget });
   };
 
-  handleMenuClose = () => {
-    this.setState({ anchorEl: null });
-    this.handleMobileMenuClose();
+  const handleMenuClose = () => {
+    // this.setState({ anchorEl: null });
+    handleMobileMenuClose();
   };
 
-  handleMobileMenuOpen = event => {
-    this.setState({ mobileMoreAnchorEl: event.currentTarget });
+  const handleMobileMenuOpen = event => {
+    const newState = {anchorEl: headerState.anchorEl,
+      mobileMoreAnchorEl: event.currentTarget,
+      commonMenuEl: headerState.commonMenuEl}
+    setHeaderState(newState);
   };
 
-  handleMobileMenuClose = () => {
-    this.setState({ mobileMoreAnchorEl: null });
+  const handleMobileMenuClose = () => {
+    const newState = {anchorEl: headerState.anchorEl,
+      mobileMoreAnchorEl: null,
+      commonMenuEl: headerState.commonMenuEl}
+    setHeaderState(newState);
   };
 
-  handleCommonMenuOpen = event => {
-    this.setState({ commonMenuEl: event.currentTarget });
+  const handleCommonMenuOpen = event => {
+    const newState = {anchorEl: headerState.anchorEl,
+      commonMenuEl: event.currentTarget,
+      mobileMoreAnchorEl: headerState.mobileMoreAnchorEl}
+    setHeaderState(newState);
   }
 
-  handleCommonMenuClose = () => {
-    this.setState({ commonMenuEl: null });
+  const handleCommonMenuClose = () => {
+    const newState = {anchorEl: headerState.anchorEl,
+      commonMenuEl: null,
+      mobileMoreAnchorEl: headerState.mobileMoreAnchorEl}
+    setHeaderState(newState);
   };
 
-  render() {
-    const { anchorEl, mobileMoreAnchorEl, commonMenuEl, isLoggedIn} = this.state;
-    const { classes } = this.props;
-    let isMenuOpen = Boolean(anchorEl);
-    let isCommonMenuOpen = Boolean(commonMenuEl);
-    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-    const renderMenu = (
+  const openChatBox = () => {
+    history.push(ROUTES.CHAT_BOX);
+  }
+
+  const { state } = React.useContext(AuthContext);
+  const [headerState, setHeaderState] = React.useState(navBarState);
+  const { anchorEl, mobileMoreAnchorEl, commonMenuEl} = headerState;
+  const { classes } = props;
+  let isMenuOpen = Boolean(anchorEl);
+  let isCommonMenuOpen = Boolean(commonMenuEl);
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    const renderLoggedInMenu = (
       <Menu
         anchorEl={anchorEl}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         open={isMenuOpen}
-        onClose={this.handleMenuClose}
+        onClose={handleMenuClose}
       >
-        <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
-        <MenuItem onClick={this.handleMenuClose}>My account</MenuItem>
-        <MenuItem onClick={this.handleMenuClose}>Logout</MenuItem>
+        <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+        <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+        <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
       </Menu>
     );
 
@@ -161,9 +112,9 @@ class PrimarySearchAppBar extends React.Component {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         open={isMobileMenuOpen}
-        onClose={this.handleMenuClose}
+        onClose={handleMenuClose}
       >
-        <MenuItem onClick={this.handleMobileMenuClose}>
+        <MenuItem onClick={handleMobileMenuClose}>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
               <MailIcon />
@@ -171,7 +122,7 @@ class PrimarySearchAppBar extends React.Component {
           </IconButton>
           <p>Messages</p>
         </MenuItem>
-        <MenuItem onClick={this.handleMobileMenuClose}>
+        <MenuItem onClick={handleMobileMenuClose}>
           <IconButton color="inherit">
             <Badge badgeContent={11} color="secondary">
               <NotificationsIcon />
@@ -179,7 +130,7 @@ class PrimarySearchAppBar extends React.Component {
           </IconButton>
           <p>Notifications</p>
         </MenuItem>
-        <MenuItem onClick={this.handleProfileMenuOpen}>
+        <MenuItem onClick={handleProfileMenuOpen}>
           <IconButton color="inherit">
             <AccountCircle />
           </IconButton>
@@ -195,14 +146,17 @@ class PrimarySearchAppBar extends React.Component {
       transformOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       open={isCommonMenuOpen}
     >
-      <MenuItem onClick={this.handleCommonMenuClose} component={Link} to={ROUTES.AUTHENTICATION_DOC}>Authentication</MenuItem>
-      <MenuItem onClick={this.handleCommonMenuClose} component={Link} to={ROUTES.REALTIMEDB_DOC}>Realtime DB</MenuItem>
-      <MenuItem onClick={this.handleCommonMenuClose} component={Link} to={ROUTES.HOSTING_DOC}>Hosting</MenuItem>
+      <MenuItem onClick={handleCommonMenuClose} component={Link} to={ROUTES.AUTHENTICATION_DOC}>Authentication</MenuItem>
+      <MenuItem onClick={handleCommonMenuClose} component={Link} to={ROUTES.REALTIMEDB_DOC}>Realtime DB</MenuItem>
+      <MenuItem onClick={handleCommonMenuClose} component={Link} to={ROUTES.HOSTING_DOC}>Hosting</MenuItem>
     </Menu>)
 
     let headerIcons;
-    if (isLoggedIn) {
+    if (state.isAuthenticated) {
       headerIcons = (<div className={classes.sectionDesktop}>
+          <CustomFilter name={filtersArray.division.name} config={filtersArray.division.config}/>
+          <CustomFilter name={filtersArray.affiliate.name} config={filtersArray.affiliate.config}/>
+          <CustomFilter name={filtersArray.org.name} config={filtersArray.org.config}/>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
               <MailIcon />
@@ -216,7 +170,7 @@ class PrimarySearchAppBar extends React.Component {
           <IconButton
             aria-owns={isMenuOpen ? 'material-appbar' : undefined}
             aria-haspopup="true"
-            onClick={this.handleProfileMenuOpen}
+            onClick={handleProfileMenuOpen}
             color="inherit"
           >
             <AccountCircle />
@@ -225,9 +179,10 @@ class PrimarySearchAppBar extends React.Component {
     } else {
       headerIcons = (
         <div className={classes.sectionDesktop}>
-        <Button aria-haspopup="true" aria-controls="tutorials-menu" onClick={this.handleCommonMenuOpen} color="inherit">Tutorials</Button>
-        <Link to={ROUTES.SIGN_IN}><MyButton variant="contained" color="primary">
-        </MyButton></Link>
+        <Button aria-haspopup="true" aria-controls="tutorials-menu" onClick={handleCommonMenuOpen} color="inherit">Tutorials</Button>
+        <Button onClick={openChatBox} color="inherit">Chat</Button>
+        <Link to={ROUTES.SIGN_IN}><CustomButton config={{title:"Login", styles: {}}}>
+        </CustomButton></Link>
         </div>)
     };
     return (
@@ -250,31 +205,31 @@ class PrimarySearchAppBar extends React.Component {
                 }}
               />
             </div>
+            
             <div className={classes.grow} />
             
             {headerIcons}
             <div className={classes.sectionMobile}>
-              <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
+              <IconButton aria-haspopup="true" onClick={handleMobileMenuOpen} color="inherit">
                 <MoreIcon />
               </IconButton>
             </div>
+        
           </Toolbar>
         </AppBar>
-        {renderMenu}
+        {renderLoggedInMenu}
         {renderCommonMenu}
         {renderMobileMenu}
 
-        <Route path={ROUTES.SIGN_IN} component={() => <SignInPage
-              isLoggedIn={this.state.isLoggedIn}
-            />} />
-            
+        <Route path={ROUTES.SIGN_IN} component={SignInPage} />
+        <Route path={ROUTES.CHAT_BOX} component={ChatForm} />    
         <Route path={ROUTES.AUTHENTICATION_DOC} component={AuthenticationDoc} />
         <Route path={ROUTES.REALTIMEDB_DOC} component={ReattimeDBDoc} />    
         <Route path={ROUTES.HOSTING_DOC} component={HostingDoc} />
         <Route path={ROUTES.HOME+'/:username'} component={Home} />
       </div>
     );
-  }
+  // }
 }
 
 PrimarySearchAppBar.propTypes = {

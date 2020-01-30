@@ -26,7 +26,7 @@ class AuthenticationDoc extends Component {
                 </p>
                 <img src={authentication} alt="authentication" />
                 <h1>Step 2:</h1>
-                <p>Second, we will implement the authentication API for our Firebase class. Import and instantiate the package from Firebase responsible for all the authentication in your <emp>src/components/Firebase/firebase.js</emp> file:</p>
+                <p>Second, we will implement the authentication API for our Firebase class. Import and instantiate the package from Firebase responsible for all the authentication in your <i>src/components/Firebase/firebase.js</i> file:</p>
                 <img src={authReact} alt="authReact" />
                 <h1>Step 3:</h1>
                 <p>Let's define all the authentication functions as class methods.</p>

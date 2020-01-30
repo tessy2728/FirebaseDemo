@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import AppNavBar from './components/appnavbar/AppNavBar';
+import NavBar from './components/appnavbar/NavBar';
 import firebaseInfo1 from './images/firebase-info-1.jpg';
 import firebaseInfo2 from './images/firebase-info-2.jpg';
 import firebaseInfo3 from './images/firebase-info-3.jpg';
@@ -16,19 +16,52 @@ import ReattimeDBDoc from './components/tutorials/reattimeDBDoc';
 import { Router,  Route } from 'react-router-dom';
 import * as ROUTES from './constants/routes';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
+export const AuthContext = React.createContext();
 
-    this.state = {
-      isLoggedIn: false,
-    };
+const isValid = () => {
+  let user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
+  return user ? user.stsTokenManager.expirationTime > new Date().getTime() : false;
+}
+
+const initialState = {
+  isAuthenticated: isValid(),
+  user: null,
+  token: null,
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "LOGIN":
+      localStorage.setItem("user", JSON.stringify(action.payload.user));
+      console.log(action)
+      localStorage.setItem("token", JSON.stringify(action.accessToken));
+      return {
+        ...state,
+        isAuthenticated: true,
+        user: action.payload,
+        // token: action.payload.token
+      };
+    case "LOGOUT":
+      localStorage.clear();
+      return {
+        ...state,
+        isAuthenticated: false,
+        user: null
+      };
+    default:
+      return state;
   }
+};
 
-  render() {
+const App = () => {
+  const [state, dispatch] = React.useReducer(reducer, initialState);
     return (
-      <div className="App Site">
-        <AppNavBar isLoggedIn={this.state.isLoggedIn}/>
+      <AuthContext.Provider  value={{
+        state,
+        dispatch
+      }}>
+        <div className="App Site">
+        <NavBar isLoggedIn={state.isAuthenticated}/>
         
         <div className="Site-content">
                 <h1>Step 1:</h1>
@@ -45,21 +78,19 @@ class App extends Component {
                 <h1>Step 6:</h1>
                 <p>You can define the environmental variables in a new .env file in your project's root folder. The .env file can also be added to your .gitginore file (in case you are using git), so your Firebase credentials are not exposed publicly on a platform like GitHub.</p>
                 <img src={reactEnv} alt="reactEnv" />
-                <p>Next, we'll create a new file <emp>src/components/firebase/firebase.js</emp> for the Firebase setup. </p>
+                <p>Next, we'll create a new file <i>src/components/firebase/firebase.js</i> for the Firebase setup. </p>
                 <img src={configImg} alt="configImg" />
                 <h1>Step 7:</h1>
-                <p>Next, we will connect the firebase with React application. Use <a href="https://www.robinwieruch.de/react-context-api/">React’s Context API</a> to provide a Firebase instance once at the top-level of your component hierarchy. Create a new <emp>src/components/firebase/context.js</emp> file in your Firebase module and provide the following implementation details:</p>
+                <p>Next, we will connect the firebase with React application. Use <a href="https://www.robinwieruch.de/react-context-api/">React’s Context API</a> to provide a Firebase instance once at the top-level of your component hierarchy. Create a new <i>src/components/firebase/context.js</i> file in your Firebase module and provide the following implementation details:</p>
                 <img src={firebaseContextImg} alt="firebaseContextImg" />
                 <h1>Step 8:</h1>
                 <p>The Firebase Context from the Firebase module (folder) is used to provide a Firebase instance to your entire application in the src/index.js file. You only need to create the Firebase instance with the Firebase class and pass it as value prop to the React's Context:</p>
                 <img src={firebaseProviderImg} alt="firebaseProviderImg" />
         </div>
-        {/* <Route path={ROUTES.AUTHENTICATION_DOC} component={AuthenticationDoc} />
-        <Route path={ROUTES.REALTIMEDB_DOC} component={ReattimeDBDoc} />    
-        <Route path={ROUTES.HOME+'/:username'} component={Home} /> */}
       </div>
+      </AuthContext.Provider>
+      
     );
-  }
 }
 
 export default App;

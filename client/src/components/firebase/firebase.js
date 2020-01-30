@@ -1,4 +1,5 @@
 import app from 'firebase/app';
+import firebase from 'firebase'
 
 import 'firebase/auth';
 
@@ -18,6 +19,10 @@ import 'firebase/auth';
       this.auth = app.auth();
 
       this.googleProvider = new app.auth.GoogleAuthProvider();
+
+      this.db = firebase.database();
+      // this.messages = () => this.db.ref('/messages');
+      // this.message = (uid) => this.db.ref('/messages'+uid);
     }
 
     // *** Auth API ***

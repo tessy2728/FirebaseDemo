@@ -1,0 +1,54 @@
+{
+    "division": {
+        "name": "Division",
+        "config": {
+            "source": {
+                "autocomplete": {
+                    "sourceURL": "data/division.json",
+                    "autoComplete": false
+                },
+                "prefetch": false
+            },
+            "multiselect": false,
+            "closeOnSelect": false,
+            "clearable": false,
+            "searchBy": "name",
+            "valueType": "string",
+            "labelField": "name",
+            "cacheUpto": 4
+        }
+    },
+    "affiliate": {
+        "name": "Affiliate",
+        "config": {
+            "source": {
+                "autocomplete": {
+                    "sourceURL": "data/affiliates.json",
+                    "autoComplete": true
+                },
+                "prefetch": true
+            },
+            "multiselect": false,
+            "valueType": "object",
+            "cacheUpto": 4
+        }
+    },
+    "org": {
+        "name": "Organization",
+        "config": {
+            "source": {
+                "autocomplete": {
+                    "autoComplete": true,
+                    "sourceURL": "data/affiliates.json"
+                },
+                "prefetch": true
+            },
+            "multiselect": {
+                "tagView": true
+            },
+            "customFilter": true,
+            "cacheUpto": 4,
+            "valueType": "array"
+        }
+    }
+}

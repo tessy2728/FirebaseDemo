@@ -1,0 +1,162 @@
+[
+    {
+        "code": "ST-920-CL",
+        "text": "Locate",
+        "isChild": false
+    },
+    {
+        "code": "PT300D",
+        "text": "PT300D",
+        "isChild": null
+    },
+    {
+        "code": "PT300",
+        "text": "PT300",
+        "isChild": null
+    },
+    {
+        "code": "TTU-700",
+        "text": "Trailer Tracking Unit",
+        "isChild": null
+    },
+    {
+        "code": "RS-SLL-724C",
+        "text": "SLL",
+        "isChild": true
+    },
+    {
+        "code": "RS-SLE-724C",
+        "text": "SLE",
+        "isChild": true
+    },
+    {
+        "code": "CelloTrack Container Lock",
+        "text": "CelloTrack Container Lock",
+        "isChild": false
+    },
+    {
+        "code": "CelloTrack Container Seal",
+        "text": "CelloTrack Container Seal",
+        "isChild": false
+    },
+    {
+        "code": "RS-SLA-724C",
+        "text": "SLA",
+        "isChild": true
+    },
+    {
+        "code": "SmartOne C",
+        "text": "SmartOne C Satellite Tracker",
+        "isChild": null
+    },
+    {
+        "code": "ST-aRFID",
+        "text": "Active RFID Tag",
+        "isChild": null
+    },
+    {
+        "code": "STR-900-ISO",
+        "text": "IoT Sensor",
+        "isChild": null
+    },
+    {
+        "code": "Jointech JT707",
+        "text": "Jointech JT707",
+        "isChild": false
+    },
+    {
+        "code": "ST-900-CE",
+        "text": "Mobile Security Child with Sensors",
+        "isChild": true
+    },
+    {
+        "code": "ST-900-CC",
+        "text": "Secure Child",
+        "isChild": true
+    },
+    {
+        "code": "GT1100",
+        "text": "GT-1100 Solar-powered Asset Tracker",
+        "isChild": false
+    },
+    {
+        "code": "ST-930-CL",
+        "text": "Locate V3",
+        "isChild": false
+    },
+    {
+        "code": "SmartOne Solar",
+        "text": "SmartOne Solar Satellite Tracker",
+        "isChild": false
+    },
+    {
+        "code": "RS-SLS-724C",
+        "text": "SLS",
+        "isChild": null
+    },
+    {
+        "code": "RS-SLM-324C",
+        "text": "SLM",
+        "isChild": false
+    },
+    {
+        "code": "ST-900-CP",
+        "text": "Secure",
+        "isChild": false
+    },
+    {
+        "code": "RS-IVM-024B",
+        "text": "IVM",
+        "isChild": false
+    },
+    {
+        "code": "ST-900-CF",
+        "text": "Fixed Secure",
+        "isChild": false
+    },
+    {
+        "code": "CelloTrack",
+        "text": "CelloTrack Standalone",
+        "isChild": false
+    },
+    {
+        "code": "CelloTrack Power T",
+        "text": "CelloTrack Power T",
+        "isChild": false
+    },
+    {
+        "code": "MultiSense",
+        "text": "Pointer MultiSense",
+        "isChild": true
+    },
+    {
+        "code": "MultiSense-TH",
+        "text": "Pointer MultiSense-TH",
+        "isChild": true
+    },
+    {
+        "code": "CelloTrack Power XT LTE Cat1",
+        "text": "CelloTrack Power XT LTE Cat1",
+        "isChild": false
+    },
+    {
+        "code": "Savi Satellite",
+        "text": "Savi Satellite",
+        "isChild": false
+    },
+    {
+        "code": "T11012450",
+        "text": "TempTale GEO",
+        "isChild": false
+    },
+    {
+        "code": "Ruptela Eco4_Light",
+        "text": "Ruptela Eco4_Light",
+        "isChild": false
+    },
+    {
+        "code": "Teltonika FMB920",
+        "text": "Teltonika FMB920",
+        "isChild": false
+    }
+]

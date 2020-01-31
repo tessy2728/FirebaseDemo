@@ -108,3 +108,8 @@
     background-clip: padding-box;
     border: 1px solid #ccc;
   }
+
+  .filter-dropdown__menu.dropdown-menu {
+    overflow-y: auto;
+    height: 200px;
+  }

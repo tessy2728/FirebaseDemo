@@ -31,7 +31,8 @@ const useStyles = makeStyles(theme => ({
     },
     list: {
       listStyleType: 'none',
-      padding: 0
+      padding: 0,
+      margin: '10px 0'
     }
   }));
 

@@ -36,7 +36,7 @@ export default function TaggedFilter(props) {
         defaultValue: props.selectedArray ? getSelectedOptions(props.selectedArray) : null,
         multiple: props.config.multiselect,
         options: props.filterData,
-        getOptionLabel: option => option.name,
+        getOptionLabel: option => option[config.searchBy],
     });
     const clearBtnConfig = ({
             title: "Clear",
@@ -78,26 +78,31 @@ export default function TaggedFilter(props) {
             return (<CheckIcon fontSize="small" />) 
     }
 
+    const selectDeselect = (option) => {
+        selectedArray.push(option)
+        props.onApply(selectedArray);
+    }
+
     const customFilter = (<div>
         <div {...getRootProps()} className={classes.taggedAutocomplete}>
             <ul className={classes.list}>
             {cachedValue.map((option, index) => (
-                <li className={classes.listItem} key={index}><span>{option.name}{isChecked(option)}</span></li>
+                <li className={classes.listItem} key={index} onClick={() => selectDeselect(option)}><span>{option[config.searchBy]}{isChecked(option)}</span></li>
             ))}
             </ul>
             
             {value.map((option, index) => (
-                <Tag label={option.name} {...getTagProps({ index })} className={classes.verticalSpacing10} />
+                <Tag label={option[config.searchBy]} {...getTagProps({ index })} className={classes.verticalSpacing10} />
             ))}
             <div className={classes.verticalSpacing10}>
-                <input {...getInputProps()} placeholder={`Search ${title}`} className={classes.autoCompleteInput}/>
+                <input {...getInputProps()} placeholder={`Search ${title} `} className={classes.autoCompleteInput}/>
             </div>
         </div>
         {groupedOptions.length > 0 ? (
             <Listbox {...getListboxProps()}>
                 {groupedOptions.map((option, index) => (
                     <li {...getOptionProps({ option, index })}>
-                        <span>{option.name}</span>
+                        <span>{option[config.searchBy]}</span>
                         <CheckIcon fontSize="small" />
                     </li>
                 ))}

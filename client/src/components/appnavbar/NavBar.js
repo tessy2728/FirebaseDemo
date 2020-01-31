@@ -154,15 +154,20 @@ const PrimarySearchAppBar = (props) => {
     let headerIcons;
     if (state.isAuthenticated) {
       headerIcons = (<div className={classes.sectionDesktop}>
-          <CustomFilter name={filtersArray.division.name} config={filtersArray.division.config}/>
-          <CustomFilter name={filtersArray.affiliate.name} config={filtersArray.affiliate.config}/>
-          <CustomFilter name={filtersArray.org.name} config={filtersArray.org.config}/>
+          {
+          Object.keys(filtersArray).map((key) =>
+            <CustomFilter name={filtersArray[key].name} config={filtersArray[key].config}/>
+          )}
+          
+          {/* <CustomFilter name={filtersArray.affiliate.name} config={filtersArray.affiliate.config}/>
+          <CustomFilter name={filtersArray.org.name} config={filtersArray.org.config}/> */}
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
               <MailIcon />
             </Badge>
           </IconButton>
           <IconButton color="inherit">
+
             <Badge badgeContent={17} color="secondary">
               <NotificationsIcon />
             </Badge>

@@ -20,18 +20,19 @@ export default function AutoSuggestFilter(props) {
         const inputValue = value.trim().toLowerCase();
         const inputLength = inputValue.length;
         setQuery(value);
-        // setEndpoint(APIConstants.BASE_URL + config.source.autocomplete.sourceURL)
-        return inputLength === 0 ? [] : filterData.filter(option =>
-            option.name.toLowerCase().slice(0, inputLength) === inputValue
+        // setEndpoint(APIConstants.BASE_URL + config.source.sourceURL)
+        console.log(filterData)
+        return inputLength === 0 ? [] : filterData && filterData.filter(option =>
+            option[config.searchBy].toLowerCase().slice(0, inputLength) === inputValue
         );
     };
 
-    const getSuggestionValue = suggestion => suggestion.name;
+    const getSuggestionValue = suggestion => suggestion[config.searchBy];
 
     const renderSuggestion = suggestion => {
         return (
             <div className={suggestion.selected ? 'selected' : ''}>
-                {suggestion.name}
+                {suggestion[config.searchBy]}
             </div>
         )
     };
@@ -47,11 +48,14 @@ export default function AutoSuggestFilter(props) {
 
     const onChange = (event, { newValue }) => {
         setQuery(newValue);
+        // if(config.closeOnSelect) {
+        //     props.onApply(newValue);
+        // }
     };
 
     // Autosuggest will pass through all these props to the input.
     const inputProps = {
-        placeholder: 'Search' + title,
+        placeholder: 'Search ' + title,
         name: title + 'Search',
         value: query,
         onChange: onChange

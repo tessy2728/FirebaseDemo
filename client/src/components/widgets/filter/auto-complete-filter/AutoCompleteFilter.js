@@ -32,7 +32,7 @@ export default function AutoCompleteFilter(props) {
         if (value) {
             const option = {
                 value: value,
-                name: value.name
+                name: value[config.searchBy]
             };
             setValue(option);
         } else
@@ -43,12 +43,12 @@ export default function AutoCompleteFilter(props) {
         setAutoCompleteValue(value);
     };
     const isChecked = (option) => {
-        if(option.name === selecteValue.name)
+        if(option[config.searchBy] === selecteValue[config.searchBy])
             return (<CheckIcon fontSize="small" />) 
     }
 
     const selectDeselect = (option) => {
-        if(option.name === selecteValue.name)
+        if(option[config.searchBy] === selecteValue[config.searchBy])
             setValue({});
         else {
             setAutoCompleteValue(option)
@@ -60,14 +60,14 @@ export default function AutoCompleteFilter(props) {
         options={filterData}
         autoComplete={true}
         multiple={config.multiselect}
-        getOptionLabel={option => option.name}
+        getOptionLabel={option => option[config.searchBy]}
         onChange={onChange}
         style={{ width: 300, padding: '10px' }}
         renderInput={params => (
             <div>
                 <ul className={classes.list}>
                 {cachedValue.map((option, index) => (
-                    <li className={classes.listItem} key={index}><span onClick={()=>selectDeselect(option)}>{option.name}</span>{isChecked(option)}</li>
+                    <li className={classes.listItem} key={index}><span onClick={()=>selectDeselect(option)}>{option[config.searchBy]}</span>{isChecked(option)}</li>
                 ))}
                 </ul>
                 <TextField {...params} label={title} variant="outlined" fullWidth />

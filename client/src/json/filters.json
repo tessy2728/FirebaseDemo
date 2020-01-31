@@ -3,14 +3,13 @@
         "name": "Division",
         "config": {
             "source": {
-                "autocomplete": {
-                    "sourceURL": "data/division.json",
-                    "autoComplete": false
-                },
-                "prefetch": false
+                "autocomplete": true,
+                "sourceURL": "data/division.json",
+                "prefetch": false,
+                "prePopulate": false
             },
             "multiselect": false,
-            "closeOnSelect": false,
+            "closeOnSelect": true,
             "clearable": false,
             "searchBy": "name",
             "valueType": "string",
@@ -22,13 +21,14 @@
         "name": "Affiliate",
         "config": {
             "source": {
-                "autocomplete": {
-                    "sourceURL": "data/affiliates.json",
-                    "autoComplete": true
-                },
-                "prefetch": true
+                "autocomplete": true,
+                "sourceURL": "data/affiliates.json",
+                "prefetch": true,
+                "prePopulate": true
             },
             "multiselect": false,
+            "closeOnSelect": false,
+            "searchBy": "name",
             "valueType": "object",
             "cacheUpto": 4
         }
@@ -37,18 +37,33 @@
         "name": "Organization",
         "config": {
             "source": {
-                "autocomplete": {
-                    "autoComplete": true,
-                    "sourceURL": "data/affiliates.json"
-                },
-                "prefetch": true
+                "autocomplete": true,
+                "sourceURL": "data/affiliates.json",
+                "prefetch": true,
+                "prePopulate": true
             },
             "multiselect": {
-                "tagView": true
+                "taggedView": true
             },
-            "customFilter": true,
+            "searchBy": "name",
             "cacheUpto": 4,
             "valueType": "array"
         }
+    },
+    "vehicleType":{
+        "name": "Vehicle Type",
+        "config": {
+            "source": {
+                "autocomplete": false,
+                "sourceURL": "data/vehicleTypes.json",
+                "prefetch": true,
+                "prePopulate": false
+            },
+            "multiselect": false,
+            "searchBy": "text",
+            "valueType": "object",
+            "cacheUpto": 4
+        }
     }
+
 }

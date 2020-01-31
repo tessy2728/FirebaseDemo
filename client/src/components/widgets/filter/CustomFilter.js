@@ -20,12 +20,12 @@ const CustomFilter = (props) => {
         name: props.name,
         config: props.config
     }
-    //const [endpoint, setEndpoint] = React.useState(APIConstants.BASE_URL + props.config.source.autocomplete.sourceURL);
+    //const [endpoint, setEndpoint] = React.useState(APIConstants.BASE_URL + props.config.source.sourceURL);
     let { name, config } = state;
-    const [selectedArray, setSelectedArray] = React.useState(utils.parseJSON(localStorage.getItem(name + storeKeys.FILTER_CACHE_PREFIX)));
-    
+    const [selectedArray, setSelected] = React.useState(utils.parseJSON(localStorage.getItem(name + storeKeys.FILTER_CACHE_PREFIX)));
+
     //Call API and set the source data for the filters
-    filterData = usefetchFilterData(APIConstants.BASE_URL + config.source.autocomplete.sourceURL).filterData;
+    filterData = usefetchFilterData(APIConstants.BASE_URL + config.source.sourceURL).filterData;
 
     const handleClick = (e) => {
         if (e.target.id && e.target.id.includes('option')) {
@@ -57,99 +57,125 @@ const CustomFilter = (props) => {
     }
 
     const extractDeletedObjects = (prevArray, currentArray, cachedArray) => {
-        return prevArray.reduce((array, item) => prevArray.some(pItem => pItem.code === item.code) && !currentArray.some(cItem => cItem.code === item.code) ? [...array, item] : array,[])
+        return prevArray ? prevArray.reduce((array, item) => prevArray.some(pItem => pItem.code === item.code) && !currentArray.some(cItem => cItem.code === item.code) ? [...array, item] : array, []) : []
     }
 
     const deleteObjectsInCurrentArray = (currentArray, cachedArray) => {
-        return cachedArray.reduce((array, item) => !currentArray.some(cItem => cItem.code === item.code) ? [...array, item] : array, [])
+        return cachedArray ? cachedArray.reduce((array, item) => !currentArray.some(cItem => cItem.code === item.code) ? [...array, item] : array, []) : []
     }
 
     //Cache recent seletctions. Number of selections will come from config
-    const cacheValues = (value) => {
+    const updateRecentCacheValues = (value) => {
         let cachedValue = utils.parseJSON(localStorage.getItem(name + storeKeys.FILTER_PREV_CACHE_PREFIX))
-        if(value) {
-            if (config.valueType === 'string' || config.valueType === 'object') {
+        if (value) {
+            if (config.valueType === 'string') {
                 if (cachedValue) {
-                    if(value !== selectedArray) {
+                    if (value !== selectedArray) {
                         if (cachedValue.length < config.cacheUpto) {
                             if (!isObjectFound(cachedValue, value))
                                 cachedValue.push(value);
                         } else {
                             cachedValue.splice(0, 1);
                             if (!isObjectFound(cachedValue, value))
-                              cachedValue.push(value);
+                                cachedValue.push(value);
                         }
                     }
                 } else
                     cachedValue = [value];
+            } else if (config.valueType === 'object') {
+                if (cachedValue) {
+                    if (value.value.code !== selectedArray.value.code) {
+                        if (cachedValue.length < config.cacheUpto) {
+                            if (!isObjectFound(cachedValue, value.value))
+                                cachedValue.push(value.value);
+                        } else {
+                            cachedValue.splice(0, 1);
+                            if (!isObjectFound(cachedValue, value.value))
+                                cachedValue.push(value.value);
+                        }
+                    }
+                } else
+                    cachedValue = [value.value];
             } else if (config.valueType === 'array') {
                 if (cachedValue) {
-                            if (cachedValue.length < config.cacheUpto) {
-                                cachedValue = cachedValue.concat(extractDeletedObjects(selectedArray, value, cachedValue))
-                            } else {
-                                cachedValue.splice(0, 1);
-                                cachedValue = cachedValue.concat(extractDeletedObjects(selectedArray, value, cachedValue))
-                            }
-    
+                    if (cachedValue.length < config.cacheUpto) {
+                        cachedValue = cachedValue.concat(extractDeletedObjects(selectedArray, value, cachedValue))
+                    } else {
+                        cachedValue.splice(0, 1);
+                        cachedValue = cachedValue.concat(extractDeletedObjects(selectedArray, value, cachedValue))
+                    }
+
                 } else {
                     cachedValue = extractDeletedObjects(selectedArray, value, cachedValue)
-                }   
-                cachedValue = deleteObjectsInCurrentArray(value, cachedValue); 
+                }
+                cachedValue = deleteObjectsInCurrentArray(value, cachedValue);
             }
         }
         if (cachedValue)
             localStorage.setItem(name + storeKeys.FILTER_PREV_CACHE_PREFIX, JSON.stringify(cachedValue));
     }
 
+    const clearFilter = (emptyValue) => {
+        setSelected(emptyValue);
+        setDisplayName(name);
+        localStorage.removeItem(name + storeKeys.FILTER_CACHE_PREFIX);
+    }
+    const setCache = (value) => {
+        updateRecentCacheValues(value);
+        setSelected(value);
+        localStorage.setItem(name + storeKeys.FILTER_CACHE_PREFIX, JSON.stringify(value));
+    }
+
     const setValue = value => {
-        cacheValues(value);
-        setSelectedArray(value);
-        localStorage.setItem(name + storeKeys.FILTER_CACHE_PREFIX, JSON.stringify(value))
+        setCache(value);
         if (config.multiselect) {
             if (value.length > 1) {
                 setDisplayName('Multiple');
             } else if (value.length) {
-                setDisplayName(value[0].name);
+                setDisplayName(value[0][config.searchBy]);
             } else {
-                setSelectedArray([]);
-                setDisplayName(name);
-                localStorage.removeItem(name + storeKeys.FILTER_CACHE_PREFIX);
+                clearFilter([]);
             }
         } else {
             if (config.valueType === 'string') {
-                if (value)
-                    setDisplayName(value);
-                else {
-                    setSelectedArray('');
-                    setDisplayName(name);
-                    localStorage.removeItem(name + storeKeys.FILTER_CACHE_PREFIX);
-                }
+                value ? setDisplayName(value) : clearFilter('');
             } else if (config.valueType === 'object') {
-                if (value)
-                    setDisplayName(value.name);
-                else {
-                    setSelectedArray({});
-                    setDisplayName(name);
-                    localStorage.removeItem(name + storeKeys.FILTER_CACHE_PREFIX);
-                }
+                value ? setDisplayName(value[config.searchBy]) : clearFilter({})
             }
         }
         setShowSelect(false);
     }
 
     const clearValue = () => {
-        setSelectedArray(config.multiselect ? [] : '');
+        setSelected(config.multiselect ? [] : '');
         setDisplayName(name);
     }
 
     const renderFilter = () => {
-        if (config.source.autocomplete && config.source.prefetch && filterData && config.customFilter) {
-            return (<TaggedFilter config={config} title={name} filterData={filterData} selectedArray={selectedArray} onClear={clearValue} onApply={setValue} />);
-        }
-        if (config.source.autocomplete && config.source.prefetch && filterData)
-            return <AutoCompleteFilter config={config} title={name} filterData={filterData} selecteValue={selectedArray} onClear={clearValue} onApply={setValue} />;
-        if (config.source.autocomplete && !config.source.prefetch && filterData)
-            return <AutoSuggestFilter config={config} title={name} filterData={filterData} selecteValue={selectedArray} onClear={clearValue} onApply={setValue} />;
+            if(config.source.prePopulate && config.multiselect && config.multiselect.taggedView)
+                return (<TaggedFilter 
+                    config={config} 
+                    title={name} 
+                    filterData={filterData} 
+                    selectedArray={selectedArray} 
+                    onClear={clearValue} 
+                    onApply={setValue} />);
+            else if (config.source.prePopulate && !config.multiselect)
+                return <AutoCompleteFilter 
+                    config={config} 
+                    title={name} 
+                    filterData={filterData} 
+                    selecteValue={selectedArray} 
+                    onClear={clearValue} 
+                    onApply={setValue} />;
+            else 
+                return <AutoSuggestFilter 
+                    config={config} 
+                    title={name} 
+                    filterData={filterData} 
+                    selecteValue={selectedArray} 
+                    onClear={clearValue} 
+                    onApply={setValue} />;
     }
 
     const openFilterOptions = (e) => {
@@ -158,19 +184,28 @@ const CustomFilter = (props) => {
 
     const renderFilterOptions = () => {
         if (showSelect) {
-            return <ul className="filter-dropdown__menu">
-                <li>{renderFilter()}</li>
-            </ul>
+            if (!config.source.autocomplete && filterData) {
+                return <ul class="filter-dropdown__menu dropdown-menu">
+                    {filterData.map((option, index) => (
+                        <li className={classes.listItem} key={index} onClick={()=> setValue(option)}><span>{option[config.searchBy]}</span></li>
+                    ))}
+                </ul>
+            } else
+                return <ul className="filter-dropdown__menu">
+                    <li>{renderFilter()}</li>
+                </ul>
         } else {
             return null;
         }
+        
     }
 
     const filter = (
-        <div className="filter-dropdown" ref={filterRef}>
-            <Button onClick={openFilterOptions} color="inherit">{displayName}
+        <div className="filter-dropdown dropdown" ref={filterRef}>
+            <Button onClick={openFilterOptions} color="inherit" className="dropdown-toggle" data-toggle="dropdown">{displayName}
                 <span className="filter-caret"></span></Button>
             {renderFilterOptions()}
+
         </div>);
     return filter;
 }

@@ -23,6 +23,8 @@ const CustomFilter = (props) => {
     //const [endpoint, setEndpoint] = React.useState(APIConstants.BASE_URL + props.config.source.autocomplete.sourceURL);
     let { name, config } = state;
     const [selectedArray, setSelectedArray] = React.useState(utils.parseJSON(localStorage.getItem(name + storeKeys.FILTER_CACHE_PREFIX)));
+    
+    //Call API and set the source data for the filters
     filterData = usefetchFilterData(APIConstants.BASE_URL + config.source.autocomplete.sourceURL).filterData;
 
     const handleClick = (e) => {
@@ -47,9 +49,6 @@ const CustomFilter = (props) => {
         };
     }, []);
 
-    const isSelected = (array, value) => {
-        return array.some(item => item.code !== value.code);
-    }
     const isObjectFound = (array, item) => {
         if (config.valueType === 'object')
             return array.find(cacheValue => cacheValue.code === item.code);
@@ -57,6 +56,15 @@ const CustomFilter = (props) => {
             return array.find(cacheValue => cacheValue === item);
     }
 
+    const extractDeletedObjects = (prevArray, currentArray, cachedArray) => {
+        return prevArray.reduce((array, item) => prevArray.some(pItem => pItem.code === item.code) && !currentArray.some(cItem => cItem.code === item.code) ? [...array, item] : array,[])
+    }
+
+    const deleteObjectsInCurrentArray = (currentArray, cachedArray) => {
+        return cachedArray.reduce((array, item) => !currentArray.some(cItem => cItem.code === item.code) ? [...array, item] : array, [])
+    }
+
+    //Cache recent seletctions. Number of selections will come from config
     const cacheValues = (value) => {
         let cachedValue = utils.parseJSON(localStorage.getItem(name + storeKeys.FILTER_PREV_CACHE_PREFIX))
         if(value) {
@@ -74,24 +82,19 @@ const CustomFilter = (props) => {
                     }
                 } else
                     cachedValue = [value];
-                // cachedValue = filterCache(selectedArray, value);
             } else if (config.valueType === 'array') {
                 if (cachedValue) {
-                    value.map(v => {
-                        if(!isSelected(selectedArray, v)) {
                             if (cachedValue.length < config.cacheUpto) {
-                                if (!isObjectFound(cachedValue, v))
-                                    cachedValue.push(v);
+                                cachedValue = cachedValue.concat(extractDeletedObjects(selectedArray, value, cachedValue))
                             } else {
                                 cachedValue.splice(0, 1);
-                                if (!isObjectFound(cachedValue, v))
-                                    cachedValue.push(v);
+                                cachedValue = cachedValue.concat(extractDeletedObjects(selectedArray, value, cachedValue))
                             }
-                        }
-                    });
     
-                } else
-                    cachedValue = value;
+                } else {
+                    cachedValue = extractDeletedObjects(selectedArray, value, cachedValue)
+                }   
+                cachedValue = deleteObjectsInCurrentArray(value, cachedValue); 
             }
         }
         if (cachedValue)
@@ -131,7 +134,6 @@ const CustomFilter = (props) => {
                 }
             }
         }
-
         setShowSelect(false);
     }
 

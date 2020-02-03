@@ -43,12 +43,12 @@ export default function AutoCompleteFilter(props) {
         setAutoCompleteValue(value);
     };
     const isChecked = (option) => {
-        if(option[config.searchBy] === selecteValue[config.searchBy])
+        if(selecteValue && option[config.searchBy] === selecteValue[config.searchBy])
             return (<CheckIcon fontSize="small" />) 
     }
 
     const selectDeselect = (option) => {
-        if(option[config.searchBy] === selecteValue[config.searchBy])
+        if(selecteValue && option[config.searchBy] === selecteValue[config.searchBy])
             setValue({});
         else {
             setAutoCompleteValue(option)

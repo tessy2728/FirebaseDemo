@@ -89,12 +89,12 @@ export default function AutoSuggestFilter(props) {
     }
 
     const isChecked = (option) => {
-        if(option === query)
+        if(query && option === query)
             return (<CheckIcon fontSize="small" />) 
     }
 
     const selectDeselect = (option) => {
-        if(option === query)
+        if(query && option === query)
             setQuery('');
         else 
             setQuery(option);

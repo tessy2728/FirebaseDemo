@@ -64,38 +64,31 @@ const CustomFilter = (props) => {
         return cachedArray ? cachedArray.reduce((array, item) => !currentArray.some(cItem => cItem.code === item.code) ? [...array, item] : array, []) : []
     }
 
+    const getSingleSelectCacheArray = (cachedValue, selectedValue, prevSelectedValue) => {
+        if (cachedValue) {
+            if (selectedValue !== prevSelectedValue) {
+                if (cachedValue.length < config.cacheUpto) {
+                    if (!isObjectFound(cachedValue, selectedValue))
+                        cachedValue.push(selectedValue);
+                } else {
+                    cachedValue.splice(0, 1);
+                    if (!isObjectFound(cachedValue, selectedValue))
+                        cachedValue.push(selectedValue);
+                }
+            }
+        } else
+            cachedValue = [selectedValue];
+            return cachedValue;
+    }
+
     //Cache recent seletctions. Number of selections will come from config
     const updateRecentCacheValues = (value) => {
         let cachedValue = utils.parseJSON(localStorage.getItem(name + storeKeys.FILTER_PREV_CACHE_PREFIX))
         if (value) {
             if (config.valueType === 'string') {
-                if (cachedValue) {
-                    if (value !== selectedArray) {
-                        if (cachedValue.length < config.cacheUpto) {
-                            if (!isObjectFound(cachedValue, value))
-                                cachedValue.push(value);
-                        } else {
-                            cachedValue.splice(0, 1);
-                            if (!isObjectFound(cachedValue, value))
-                                cachedValue.push(value);
-                        }
-                    }
-                } else
-                    cachedValue = [value];
+                cachedValue = getSingleSelectCacheArray(cachedValue, value, selectedArray);
             } else if (config.valueType === 'object') {
-                if (cachedValue) {
-                    if (value.value.code !== selectedArray.value.code) {
-                        if (cachedValue.length < config.cacheUpto) {
-                            if (!isObjectFound(cachedValue, value.value))
-                                cachedValue.push(value.value);
-                        } else {
-                            cachedValue.splice(0, 1);
-                            if (!isObjectFound(cachedValue, value.value))
-                                cachedValue.push(value.value);
-                        }
-                    }
-                } else
-                    cachedValue = [value.value];
+                cachedValue = getSingleSelectCacheArray(cachedValue, value ? value.value : {}, selectedArray ? selectedArray.value : {});
             } else if (config.valueType === 'array') {
                 if (cachedValue) {
                     if (cachedValue.length < config.cacheUpto) {
